@@ -1,24 +1,26 @@
 import React from 'react';
 import { useAppContext } from '../Utilities/AppContext';
+import Views from '../Types/views';
 
-import Home from '../Home/Home';
-import Search from '../Search/Search';
-import Library from '../Library/Library';
+import HomeView from '../Home/Home';
+import SearchView from '../Search/Search';
+import LibraryView from '../Library/Library';
 
 import './viewContainer.css';
 
 function ViewContainer() {
+  const { Home, Search, Library } = Views;
   const { currentView } = useAppContext();
   const getCurrentView = (currentView: string) => {
     switch (currentView) {
-      case 'home':
-        return <Home />
-      case 'search':
-        return <Search />
-      case 'library':
-        return <Library />
+      case Home:
+        return <HomeView />
+      case Search:
+        return <SearchView />
+      case Library:
+        return <LibraryView />
       default:
-        return <Home />
+        return <HomeView />
     }
   }
   return (

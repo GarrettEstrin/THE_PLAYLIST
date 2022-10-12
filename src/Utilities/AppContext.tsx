@@ -1,13 +1,15 @@
 import React, { createContext, ReactElement, SetStateAction, useContext, useState } from 'react';
 
+import View from '../Types/views';
+
 interface DefaultContextType {
   currentView: string,
-  setCurrentView: React.Dispatch<SetStateAction<string>>
+  setCurrentView: React.Dispatch<SetStateAction<View>>
 }
 
 const defaultContext: DefaultContextType = {
-  currentView: 'home',
-  setCurrentView: () => String
+  currentView: View.Home,
+  setCurrentView: () => View
 };
 
 export const AppContext = createContext(defaultContext);
@@ -17,7 +19,7 @@ export const useAppContext = () => {
 };
 
 export const AppContextProvider = (props: { children: ReactElement }) => {
-  const [currentView, setCurrentView] = useState('home');
+  const [currentView, setCurrentView] = useState(View.Home);
   return (
     <AppContext.Provider value={{
       currentView,
