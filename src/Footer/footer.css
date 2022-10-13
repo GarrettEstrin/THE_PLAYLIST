@@ -1,0 +1,20 @@
+.footer {
+  height: 70px;
+  border: 1px solid white;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 5px 0;
+}
+
+.footer__icon-cont {
+  color: #fff;
+  font-size: 40px;
+  margin: 0px 10px;
+  text-align: center;
+}
+
+.footer__icon-cont p {
+  font-size: 18px;
+  margin: 0;
+}
