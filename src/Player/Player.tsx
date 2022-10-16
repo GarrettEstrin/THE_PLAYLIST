@@ -3,20 +3,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause, faBackwardStep, faForwardStep } from '@fortawesome/free-solid-svg-icons'
 
 import { useAppContext } from '../Utilities/AppContext';
+
 import './player.css';
 
+
 function Player() {
-  const [song, setSong] = useState<HTMLAudioElement | null>(null);
-  const [playing, setPlaying] = useState(false);
   const { currentSong } = useAppContext();
-
+  const [playing, setPlaying] = useState(false);
   useEffect(() => {
-    setSong(new Audio('/audio/' + currentSong + '.mp3'))
-  }, [currentSong]);
+    if (playing === true) {
+      currentSong?.audio?.play();
+    }
+  }, [currentSong?.audio, currentSong?.title, currentSong?.unique, playing]);
 
+  if (currentSong === null) {
+    return null;
+  }
+  
   const play = () => {
-    if (song !== null) {
-      song.play();
+    if (currentSong?.audio) {
+      currentSong?.audio?.play();
       setPlaying(true);
     }
   };
@@ -30,10 +36,8 @@ function Player() {
   };
 
   const pause = () => {
-    if (song !== null) {
-      song.pause();
-      setPlaying(false);
-    }
+    currentSong?.audio?.pause();
+    setPlaying(false);
   };
   return (
     <div className="player">
