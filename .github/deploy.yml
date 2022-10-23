@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:    
+      - master
+      
+name: Build and Publish
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - name: Use Node.js 12.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: '16.5.0'
+        
+    - name: Build project and list output files
+      run: npm i && yarn build && ls
+      
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@2.0.0
+      env:
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        LOCAL_DIR: ./build/
+        REMOTE_DIR: ./
+        METHOD: sftp
+        PORT: 221
