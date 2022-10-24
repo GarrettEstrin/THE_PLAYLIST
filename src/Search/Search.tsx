@@ -4,8 +4,8 @@ import './search.css';
 
 function Search() {
   return (
-    <div className='view'>
-      This is the search view
+    <div className="view search">
+      <p className="search__title">Coming Soon!</p>
     </div>
   )
 };
