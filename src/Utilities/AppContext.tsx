@@ -9,7 +9,7 @@ import getRandomSong from './getRandomSong';
 interface DefaultContextType {
   currentView: string,
   setCurrentView: React.Dispatch<SetStateAction<View>>,
-  currentSong: libraryItem | null,
+  currentSong: libraryItem,
   setCurrentSong: React.Dispatch<SetStateAction<libraryItem>>,
   initializedLibrary: libraryItem[] | null
 }
@@ -17,7 +17,7 @@ interface DefaultContextType {
 const defaultContext: DefaultContextType = {
   currentView: View.Home,
   setCurrentView: () => View,
-  currentSong: null,
+  currentSong: library[0],
   setCurrentSong: () => Song,
   initializedLibrary: null
 };
@@ -35,7 +35,7 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   let currentSongKey = currentSong.key;
 
   const updateCanPlayStatus = (key: string) => {
-    library?.forEach((song) => {
+    library?.forEach((song: libraryItem) => {
       if (song.key === key) {
         song.canPlay = true;
       }
@@ -54,7 +54,7 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   }
   
   useEffect(() => {
-    library.forEach((song) => {
+    library.forEach((song: libraryItem) => {
       if (song.processed) {
         return;
       }
