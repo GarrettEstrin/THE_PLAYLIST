@@ -1,0 +1,27 @@
+.row__title {
+  margin: 10px;
+  font-size: 16px;
+}
+
+.row__cont {
+  display: flex;
+  overflow: scroll;
+}
+
+.row__item-cont {
+  max-width: 140px;
+  margin: 0 4px;
+}
+
+.row__artwork {
+  height: 100px;
+  margin: 0 auto;
+  display: block;
+}
+
+.row__item-title {
+  margin: 5px 0 10px 0;
+  text-align: center;
+  font-size: 11px;
+  padding: 0 3px;
+}
