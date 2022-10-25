@@ -7,6 +7,7 @@
   align-items: center;
   padding: 5px 20px 5px 10px;
   font-size: 30px;
+  background-color: #000;
 }
 
 .player__album-cont {

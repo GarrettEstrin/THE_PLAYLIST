@@ -4,7 +4,7 @@ const library: libraryItem[] = [
   {
     title: "GoldenEye 007, 007 Watch Theme",
     artist: "Arcade Player",
-    file: "goldeneye.mp3",
+    file: "goldeneye-dev.mp3",
     album_art: "goldeneye_soundtrack.jpeg",
     audio: undefined,
     canPlay: false,
@@ -15,7 +15,7 @@ const library: libraryItem[] = [
   {
     title: "Butterfly",
     artist: "Crazy Town",
-    file: "butterfly.mp3",
+    file: "butterfly-dev.mp3",
     album_art: "gift_of_game.jpeg",
     audio: undefined,
     canPlay: false,
@@ -26,7 +26,7 @@ const library: libraryItem[] = [
   {
     title: "Re-Arranged",
     artist: "Limp Bizkit",
-    file: "re-arranged.mp3",
+    file: "re-arranged-dev.mp3",
     album_art: "significant_other.jpeg",
     audio: undefined,
     canPlay: false,

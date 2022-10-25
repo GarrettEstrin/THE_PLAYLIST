@@ -5,7 +5,7 @@ import './search.css';
 function Search() {
   return (
     <div className="view search">
-      <p className="search__title">Coming Soon!</p>
+      <p className="search__title">Search Coming Soon!</p>
     </div>
   )
 };

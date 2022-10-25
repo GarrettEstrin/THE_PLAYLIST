@@ -11,7 +11,8 @@ interface DefaultContextType {
   setCurrentView: React.Dispatch<SetStateAction<View>>,
   currentSong: libraryItem,
   setCurrentSong: React.Dispatch<SetStateAction<libraryItem>>,
-  initializedLibrary: libraryItem[] | null
+  initializedLibrary: libraryItem[] | null,
+  playNextSong: (song: libraryItem) => void
 }
 
 const defaultContext: DefaultContextType = {
@@ -19,7 +20,8 @@ const defaultContext: DefaultContextType = {
   setCurrentView: () => View,
   currentSong: library[0],
   setCurrentSong: () => Song,
-  initializedLibrary: null
+  initializedLibrary: null,
+  playNextSong: (song: libraryItem) => {return song}
 };
 
 export const AppContext = createContext(defaultContext);
@@ -46,11 +48,20 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
     }
   };
   
-  const playNextSong = () => {
-    const limitedLibrary = library.filter((song) => song.key !== currentSongKey);
-    const randomSong = getRandomSong(limitedLibrary);
-    setCurrentSong(randomSong);
-    currentSongKey = randomSong.key;
+  const playNextSong = (selectedSong?: libraryItem) => {
+    if (currentSong.audio) {
+      currentSong.audio.pause();
+      currentSong.audio.currentTime = 0;
+    }
+    if (selectedSong != null) {
+      setCurrentSong(selectedSong);
+      currentSongKey = selectedSong.key;
+    } else {
+      const limitedLibrary = library.filter((song) => song.key !== currentSongKey);
+      const randomSong = getRandomSong(limitedLibrary);
+      setCurrentSong(randomSong);
+      currentSongKey = randomSong.key;
+    }
   }
   
   useEffect(() => {
@@ -74,7 +85,8 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       setCurrentView,
       currentSong,
       setCurrentSong,
-      initializedLibrary
+      initializedLibrary,
+      playNextSong
     }}>
       {props.children}
     </AppContext.Provider>

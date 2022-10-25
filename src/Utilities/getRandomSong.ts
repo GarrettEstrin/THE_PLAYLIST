@@ -1,8 +1,7 @@
 import libraryItem from '../Types/Library';
 
-const getRandomSong = (library: libraryItem[]): libraryItem => {
-  const randomIndex = Math.floor(Math.random() * ((library.length - 1) - 0 + 1) + 0);
-  return library[randomIndex];
-}
+export const randomIndex = (maxNumber: number) => Math.floor(Math.random() * ((maxNumber - 1) - 0 + 1) + 0);
+
+const getRandomSong = (library: libraryItem[]): libraryItem => library[randomIndex(library.length)];
 
 export default getRandomSong;
