@@ -37,7 +37,10 @@ const library: libraryItem[] = [
 ];
 
 const setupLibrary = () => {
-  library.forEach((song) => {
+library.forEach((song) => {
+  if (process.env.NODE_ENV === 'development') { 
+    song.file = song.file.replace('.mp3', '-dev.mp3', );
+  }
     const audio = new Audio(`/audio/${song.file}`);
     song.audio = audio;
   })
