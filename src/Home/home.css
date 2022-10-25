@@ -1,0 +1,16 @@
+.row {
+  max-height: 120px;
+}
+
+.row__title {
+  margin: 10px;
+  font-size: 16px;
+}
+
+.row__cont {
+  display: flex;
+}
+
+.row__artwork {
+  height: 100px;
+}
