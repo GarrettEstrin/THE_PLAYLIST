@@ -5,7 +5,7 @@
 
 .row__cont {
   display: flex;
-  overflow: scroll;
+  overflow-x: scroll;
 }
 
 .row__item-cont {
