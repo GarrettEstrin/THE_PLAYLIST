@@ -4,7 +4,7 @@ import './home.css';
 function Home() {
   return (
     <div className='view'>
-      This is the home view
+      This is the home view.
     </div>
   )
 };
