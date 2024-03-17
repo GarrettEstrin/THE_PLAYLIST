@@ -2,7 +2,7 @@ import libraryItem from '../Types/Library';
 
 const library: libraryItem[] = [
   {
-    title: "GoldenEye 007, 007 Watch Theme",
+    title: "007 Watch Theme",
     artist: "Arcade Player",
     file: "goldeneye.mp3",
     album_art: "goldeneye_soundtrack.jpeg",
