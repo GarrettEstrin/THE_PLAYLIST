@@ -12,7 +12,7 @@ interface DefaultContextType {
   currentSong: libraryItem,
   setCurrentSong: React.Dispatch<SetStateAction<libraryItem>>,
   initializedLibrary: libraryItem[] | null,
-  playNextSong: (song: libraryItem) => void,
+  playNextSong: (song: string) => void,
   isPlaying: boolean,
   setIsPlaying: React.Dispatch<SetStateAction<boolean>>
   play: () => void,
@@ -25,7 +25,7 @@ const defaultContext: DefaultContextType = {
   currentSong: library[0],
   setCurrentSong: () => Song,
   initializedLibrary: null,
-  playNextSong: (song: libraryItem) => { return song },
+  playNextSong: (song: string) => { return song },
   isPlaying: false,
   setIsPlaying: () => false,
   play: () => { },
@@ -84,17 +84,21 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
     setIsPlaying(false);
   }
   
-  const playNextSong = (selectedSong: libraryItem) => {
+  const playNextSong = (selectedSongKey: string) => {
     pause();
     resetPlayingPoints();
-    
-    if (currentSongKey === selectedSong.key && currentSong.audio) {
-      currentSong.audio.play()
-    } else {
-      if (selectedSong.audio) {
-        selectedSong.audio.play();
-      }
+
+    const selectedSong = library.find((song) => {
+      return selectedSongKey === song.key;
+    });
+    if (!selectedSong) {
+      return;
     }
+
+    if (selectedSong.audio) {
+      selectedSong.audio.play();
+    }
+    
     currentSongKey = selectedSong.key;
     setCurrentSong(selectedSong);
     setIsPlaying(true);
@@ -124,10 +128,6 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       song.processed = true;
     });
   });
-
-  useEffect(() => {
-    // console.log("CurrentSong changed", currentSong.title);
-  }, [currentSong]);
 
   return (
     <AppContext.Provider value={{

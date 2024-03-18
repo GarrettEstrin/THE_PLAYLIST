@@ -19,7 +19,7 @@ function Home() {
         const song = initializedLibrary[randomIndex(initializedLibrary.length)]
         const item = (
           <div className="row__item-cont" key={i} onClick={() => {
-            playNextSong(song);
+            playNextSong(song.key);
           }}>
             <img className="row__artwork" src={`/album_covers/${song.album_art}`} alt="album art" />
             <p className="row__item-title">{song.title}</p>
