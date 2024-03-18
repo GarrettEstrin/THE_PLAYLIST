@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
 
@@ -8,29 +8,12 @@ import './player.css';
 
 
 function Player() {
-  const { currentSong } = useAppContext();
-  const [playing, setPlaying] = useState(false);
-  useEffect(() => {
-    if (playing === true) {
-      currentSong?.audio?.play();
-    }
-  }, [currentSong?.audio, currentSong?.title, currentSong?.unique, playing]);
+  const { currentSong, isPlaying, play, pause } = useAppContext();
 
   if (currentSong === null) {
     return null;
   }
   
-  const play = () => {
-    if (currentSong?.audio) {
-      currentSong?.audio?.play();
-      setPlaying(true);
-    }
-  };
-
-  const pause = () => {
-    currentSong?.audio?.pause();
-    setPlaying(false);
-  };
   return (
     <div className="player">
       <div className="player__album-cont">
@@ -40,7 +23,7 @@ function Player() {
         <p className="player__now-playing-title">{currentSong.title}</p>
         <p className="player__now-playing-artist">{currentSong.artist}</p>
       </div>
-      {playing ?
+      {isPlaying ?
         <div onClick={pause}><FontAwesomeIcon icon={faPause} /></div> :
         <div onClick={play}><FontAwesomeIcon icon={faPlay} /></div>
       }

@@ -12,7 +12,11 @@ interface DefaultContextType {
   currentSong: libraryItem,
   setCurrentSong: React.Dispatch<SetStateAction<libraryItem>>,
   initializedLibrary: libraryItem[] | null,
-  playNextSong: (song: libraryItem) => void
+  playNextSong: (song: libraryItem) => void,
+  isPlaying: boolean,
+  setIsPlaying: React.Dispatch<SetStateAction<boolean>>
+  play: () => void,
+  pause: () => void
 }
 
 const defaultContext: DefaultContextType = {
@@ -21,7 +25,11 @@ const defaultContext: DefaultContextType = {
   currentSong: library[0],
   setCurrentSong: () => Song,
   initializedLibrary: null,
-  playNextSong: (song: libraryItem) => {return song}
+  playNextSong: (song: libraryItem) => { return song },
+  isPlaying: false,
+  setIsPlaying: () => false,
+  play: () => { },
+  pause: () => { }
 };
 
 export const AppContext = createContext(defaultContext);
@@ -34,6 +42,7 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   const [currentView, setCurrentView] = useState(View.Home);
   const [currentSong, setCurrentSong] = useState<libraryItem>(library[Math.floor(Math.random() * ((library.length - 1) - 0 + 1) + 0)]);
   const [initializedLibrary, setInitializedLibrary] = useState<libraryItem[] | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   let currentSongKey = currentSong.key;
 
   const updateCanPlayStatus = (key: string) => {
@@ -47,20 +56,57 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       setInitializedLibrary(library);
     }
   };
+
+  const play = () => {
+    library.forEach((song: libraryItem) => {
+      if (song.key === currentSongKey && song.audio) {
+        song.audio.play();
+      }
+    });
+    setIsPlaying(true);
+  }
+
+  const pause = () => {
+    library.forEach((song: libraryItem) => {
+      if (song.audio) {
+        song.audio.pause();
+      }
+    });
+    setIsPlaying(false);
+  }
+
+  const resetPlayingPoints = () => {
+    library.forEach((song: libraryItem) => {
+      if (song.audio) {
+        song.audio.currentTime = 0;
+      }
+    });
+    setIsPlaying(false);
+  }
   
-  const playNextSong = (selectedSong?: libraryItem) => {
-    if (currentSong.audio) {
-      currentSong.audio.pause();
-      currentSong.audio.currentTime = 0;
-    }
-    if (selectedSong != null) {
-      setCurrentSong(selectedSong);
-      currentSongKey = selectedSong.key;
+  const playNextSong = (selectedSong: libraryItem) => {
+    pause();
+    resetPlayingPoints();
+    
+    if (currentSongKey === selectedSong.key && currentSong.audio) {
+      currentSong.audio.play()
     } else {
-      const limitedLibrary = library.filter((song) => song.key !== currentSongKey);
-      const randomSong = getRandomSong(limitedLibrary);
-      setCurrentSong(randomSong);
-      currentSongKey = randomSong.key;
+      if (selectedSong.audio) {
+        selectedSong.audio.play();
+      }
+    }
+    currentSongKey = selectedSong.key;
+    setCurrentSong(selectedSong);
+    setIsPlaying(true);
+  }
+
+  const playRandomSong = () => {
+    const limitedLibrary = library.filter((song) => song.key !== currentSongKey);
+    const randomSong = getRandomSong(limitedLibrary);
+    setCurrentSong(randomSong);
+    currentSongKey = randomSong.key;
+    if (randomSong.audio) {
+      randomSong.audio.play();
     }
   }
   
@@ -73,11 +119,15 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
         updateCanPlayStatus(song.key);
       })
       song?.audio?.addEventListener('ended', () => {
-        playNextSong();
+        playRandomSong();
       })
       song.processed = true;
     });
   });
+
+  useEffect(() => {
+    // console.log("CurrentSong changed", currentSong.title);
+  }, [currentSong]);
 
   return (
     <AppContext.Provider value={{
@@ -86,7 +136,11 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       currentSong,
       setCurrentSong,
       initializedLibrary,
-      playNextSong
+      playNextSong,
+      isPlaying,
+      setIsPlaying,
+      play,
+      pause
     }}>
       {props.children}
     </AppContext.Provider>
