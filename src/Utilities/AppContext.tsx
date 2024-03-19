@@ -150,7 +150,6 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   });
 
   useEffect(() => {
-    console.log({ headerHeight, footerHeight });
     const htmlHeight = document.body.clientHeight;
     setViewHeight(htmlHeight - headerHeight - footerHeight);
   }, [headerHeight, footerHeight])
