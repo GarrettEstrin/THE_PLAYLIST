@@ -12,7 +12,15 @@ interface DefaultContextType {
   currentSong: libraryItem,
   setCurrentSong: React.Dispatch<SetStateAction<libraryItem>>,
   initializedLibrary: libraryItem[] | null,
-  playNextSong: (song: libraryItem) => void
+  playNextSong: (song: string) => void,
+  isPlaying: boolean,
+  setIsPlaying: React.Dispatch<SetStateAction<boolean>>
+  play: () => void,
+  pause: () => void
+  getSearchSuggestion: () => string
+  setHeaderHeight: React.Dispatch<SetStateAction<number>>
+  setFooterHeight: React.Dispatch<SetStateAction<number>>
+  viewHeight: number
 }
 
 const defaultContext: DefaultContextType = {
@@ -21,7 +29,15 @@ const defaultContext: DefaultContextType = {
   currentSong: library[0],
   setCurrentSong: () => Song,
   initializedLibrary: null,
-  playNextSong: (song: libraryItem) => {return song}
+  playNextSong: (song: string) => { return song },
+  isPlaying: false,
+  setIsPlaying: () => false,
+  play: () => { },
+  pause: () => { },
+  getSearchSuggestion: () => { return "" },
+  setHeaderHeight: () => 0,
+  setFooterHeight: () => 0,
+  viewHeight: 0
 };
 
 export const AppContext = createContext(defaultContext);
@@ -34,7 +50,20 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   const [currentView, setCurrentView] = useState(View.Home);
   const [currentSong, setCurrentSong] = useState<libraryItem>(library[Math.floor(Math.random() * ((library.length - 1) - 0 + 1) + 0)]);
   const [initializedLibrary, setInitializedLibrary] = useState<libraryItem[] | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [footerHeight, setFooterHeight] = useState(0);
+  const [viewHeight, setViewHeight] = useState(0)
   let currentSongKey = currentSong.key;
+
+  const getSearchSuggestion = (): string => {
+    const searchSuggestions = library.reduce((accSearchTerms: string[], song: libraryItem) => { 
+      accSearchTerms.push(song.artist);
+      accSearchTerms.push(song.title);
+      return accSearchTerms;
+    }, [])
+    return searchSuggestions[Math.floor(Math.random() * ((searchSuggestions.length - 1) - 0 + 1) + 0)];
+  }
 
   const updateCanPlayStatus = (key: string) => {
     library?.forEach((song: libraryItem) => {
@@ -47,20 +76,61 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       setInitializedLibrary(library);
     }
   };
+
+  const play = () => {
+    library.forEach((song: libraryItem) => {
+      if (song.key === currentSongKey && song.audio) {
+        song.audio.play();
+      }
+    });
+    setIsPlaying(true);
+  }
+
+  const pause = () => {
+    library.forEach((song: libraryItem) => {
+      if (song.audio) {
+        song.audio.pause();
+      }
+    });
+    setIsPlaying(false);
+  }
+
+  const resetPlayingPoints = () => {
+    library.forEach((song: libraryItem) => {
+      if (song.audio) {
+        song.audio.currentTime = 0;
+      }
+    });
+    setIsPlaying(false);
+  }
   
-  const playNextSong = (selectedSong?: libraryItem) => {
-    if (currentSong.audio) {
-      currentSong.audio.pause();
-      currentSong.audio.currentTime = 0;
+  const playNextSong = (selectedSongKey: string) => {
+    pause();
+    resetPlayingPoints();
+
+    const selectedSong = library.find((song) => {
+      return selectedSongKey === song.key;
+    });
+    if (!selectedSong) {
+      return;
     }
-    if (selectedSong != null) {
-      setCurrentSong(selectedSong);
-      currentSongKey = selectedSong.key;
-    } else {
-      const limitedLibrary = library.filter((song) => song.key !== currentSongKey);
-      const randomSong = getRandomSong(limitedLibrary);
-      setCurrentSong(randomSong);
-      currentSongKey = randomSong.key;
+
+    if (selectedSong.audio) {
+      selectedSong.audio.play();
+    }
+    
+    currentSongKey = selectedSong.key;
+    setCurrentSong(selectedSong);
+    setIsPlaying(true);
+  }
+
+  const playRandomSong = () => {
+    const limitedLibrary = library.filter((song) => song.key !== currentSongKey);
+    const randomSong = getRandomSong(limitedLibrary);
+    setCurrentSong(randomSong);
+    currentSongKey = randomSong.key;
+    if (randomSong.audio) {
+      randomSong.audio.play();
     }
   }
   
@@ -73,11 +143,16 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
         updateCanPlayStatus(song.key);
       })
       song?.audio?.addEventListener('ended', () => {
-        playNextSong();
+        playRandomSong();
       })
       song.processed = true;
     });
   });
+
+  useEffect(() => {
+    const htmlHeight = document.body.clientHeight;
+    setViewHeight(htmlHeight - headerHeight - footerHeight);
+  }, [headerHeight, footerHeight])
 
   return (
     <AppContext.Provider value={{
@@ -86,7 +161,15 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       currentSong,
       setCurrentSong,
       initializedLibrary,
-      playNextSong
+      playNextSong,
+      isPlaying,
+      setIsPlaying,
+      play,
+      pause,
+      getSearchSuggestion,
+      setHeaderHeight,
+      setFooterHeight,
+      viewHeight
     }}>
       {props.children}
     </AppContext.Provider>
