@@ -4,7 +4,7 @@ import libraryItem from '../Types/Library';
 import { useAppContext } from '../Utilities/AppContext';
 
 function SearchResults(props: {searchTerm: string}) {
-  const { initializedLibrary } = useAppContext();
+  const { initializedLibrary, playNextSong, getSearchSuggestion } = useAppContext();
   const { searchTerm } = props;
   const search = (searchTerm: string, song: libraryItem) => {
     const { title, artist} = song;
@@ -13,17 +13,20 @@ function SearchResults(props: {searchTerm: string}) {
       artist.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }
+
   const generateSearchResults = () => {
     if (searchTerm.length === 0) {
-      return <p>Start Searching!</p>
+      return [];
     }
     const searchResults = initializedLibrary?.map((song: libraryItem, index: number) => {
       if (search(searchTerm, song)) {
         return (
-          <div className="row__item-cont" key={index}>
-            <img className="row__artwork" src={`/album_covers/${song.album_art}`} alt="album art" />
-            <p className="row__item-title">{song.title}</p>
-            <p className="row__item-title">{song.artist}</p>
+          <div className="search__row-cont" key={index} onClick={() => {playNextSong(song.key)}}>
+            <img className="search__artwork" src={`/album_covers/${song.album_art}`} alt="album art" />
+            <div className="search__title-cont">
+              <p className="search__item-title">{song.title}</p>
+              <p className="search__item-title">{song.artist}</p>
+            </div>
           </div>
         );
       }
@@ -32,7 +35,12 @@ function SearchResults(props: {searchTerm: string}) {
     const filteredResults = searchResults?.filter(result => {
       return result;
     });
-    return filteredResults?.length ? filteredResults : <p>Nothing Found!</p>
+    return filteredResults?.length ? filteredResults :
+      (
+        <div className="search__row-cont">
+          <p>Nothing Found! Try: {getSearchSuggestion()}</p>
+        </div>
+      );
   };
 
   return (

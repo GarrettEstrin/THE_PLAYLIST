@@ -17,6 +17,7 @@ interface DefaultContextType {
   setIsPlaying: React.Dispatch<SetStateAction<boolean>>
   play: () => void,
   pause: () => void
+  getSearchSuggestion: () => string
 }
 
 const defaultContext: DefaultContextType = {
@@ -29,7 +30,8 @@ const defaultContext: DefaultContextType = {
   isPlaying: false,
   setIsPlaying: () => false,
   play: () => { },
-  pause: () => { }
+  pause: () => { },
+  getSearchSuggestion: () => { return ""}
 };
 
 export const AppContext = createContext(defaultContext);
@@ -44,6 +46,15 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   const [initializedLibrary, setInitializedLibrary] = useState<libraryItem[] | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   let currentSongKey = currentSong.key;
+
+  const getSearchSuggestion = (): string => {
+    const searchSuggestions = library.reduce((accSearchTerms: string[], song: libraryItem) => { 
+      accSearchTerms.push(song.artist);
+      accSearchTerms.push(song.title);
+      return accSearchTerms;
+    }, [])
+    return searchSuggestions[Math.floor(Math.random() * ((searchSuggestions.length - 1) - 0 + 1) + 0)];
+  }
 
   const updateCanPlayStatus = (key: string) => {
     library?.forEach((song: libraryItem) => {
@@ -140,7 +151,8 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       isPlaying,
       setIsPlaying,
       play,
-      pause
+      pause,
+      getSearchSuggestion
     }}>
       {props.children}
     </AppContext.Provider>
