@@ -1,4 +1,16 @@
 .library__title {
   text-align: center;
   font-size: 40px;
+  margin: 0 0 15px 0;
+}
+
+.library__favorite {
+  align-self: center;
+  margin: 0 20px 0 auto;
+}
+
+.library__subtitle {
+  text-align: center;
+  margin: 50px auto;
+  font-size: 20px;
 }
