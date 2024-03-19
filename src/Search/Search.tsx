@@ -11,7 +11,7 @@ function Search() {
 
   return (
     <div className="view search">
-      <input type='text' className="search__input" onChange={handleInputChange} value={inputValue} placeholder="What are you looking for?"/>
+      <input type='text' className="search__input" onChange={handleInputChange} value={inputValue} placeholder="What do you want to listen to?"/>
       <SearchResults searchTerm={inputValue} />
     </div>
   )

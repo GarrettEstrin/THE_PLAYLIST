@@ -18,6 +18,9 @@ interface DefaultContextType {
   play: () => void,
   pause: () => void
   getSearchSuggestion: () => string
+  setHeaderHeight: React.Dispatch<SetStateAction<number>>
+  setFooterHeight: React.Dispatch<SetStateAction<number>>
+  viewHeight: number
 }
 
 const defaultContext: DefaultContextType = {
@@ -31,7 +34,10 @@ const defaultContext: DefaultContextType = {
   setIsPlaying: () => false,
   play: () => { },
   pause: () => { },
-  getSearchSuggestion: () => { return ""}
+  getSearchSuggestion: () => { return "" },
+  setHeaderHeight: () => 0,
+  setFooterHeight: () => 0,
+  viewHeight: 0
 };
 
 export const AppContext = createContext(defaultContext);
@@ -45,6 +51,9 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   const [currentSong, setCurrentSong] = useState<libraryItem>(library[Math.floor(Math.random() * ((library.length - 1) - 0 + 1) + 0)]);
   const [initializedLibrary, setInitializedLibrary] = useState<libraryItem[] | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const [footerHeight, setFooterHeight] = useState(0);
+  const [viewHeight, setViewHeight] = useState(0)
   let currentSongKey = currentSong.key;
 
   const getSearchSuggestion = (): string => {
@@ -140,6 +149,12 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
     });
   });
 
+  useEffect(() => {
+    console.log({ headerHeight, footerHeight });
+    const htmlHeight = document.body.clientHeight;
+    setViewHeight(htmlHeight - headerHeight - footerHeight);
+  }, [headerHeight, footerHeight])
+
   return (
     <AppContext.Provider value={{
       currentView,
@@ -152,7 +167,10 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       setIsPlaying,
       play,
       pause,
-      getSearchSuggestion
+      getSearchSuggestion,
+      setHeaderHeight,
+      setFooterHeight,
+      viewHeight
     }}>
       {props.children}
     </AppContext.Provider>
