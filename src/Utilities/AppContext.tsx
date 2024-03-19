@@ -3,7 +3,7 @@ import React, { createContext, ReactElement, SetStateAction, useContext, useEffe
 import View from '../Types/views';
 import Song from '../Types/songs';
 import libraryItem from '../Types/Library';
-import library from './library';
+import library, { getFavorites, saveFavorites } from './library';
 import getRandomSong from './getRandomSong';
 
 interface DefaultContextType {
@@ -21,6 +21,9 @@ interface DefaultContextType {
   setHeaderHeight: React.Dispatch<SetStateAction<number>>
   setFooterHeight: React.Dispatch<SetStateAction<number>>
   viewHeight: number
+  addFavorite: (songKey: string) => void
+  removeFavorite: (songKey: string) => void
+  favorites: string[]
 }
 
 const defaultContext: DefaultContextType = {
@@ -37,7 +40,10 @@ const defaultContext: DefaultContextType = {
   getSearchSuggestion: () => { return "" },
   setHeaderHeight: () => 0,
   setFooterHeight: () => 0,
-  viewHeight: 0
+  viewHeight: 0,
+  addFavorite: () => { },
+  removeFavorite: () => { },
+  favorites: getFavorites()
 };
 
 export const AppContext = createContext(defaultContext);
@@ -54,6 +60,7 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [footerHeight, setFooterHeight] = useState(0);
   const [viewHeight, setViewHeight] = useState(0)
+  const [favorites, setFavorites] = useState(getFavorites());
   let currentSongKey = currentSong.key;
 
   const getSearchSuggestion = (): string => {
@@ -120,6 +127,8 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
     }
     
     currentSongKey = selectedSong.key;
+    // const favorites = getFavorites();
+    // selectedSong.favorite = favorites.includes(selectedSong.key);
     setCurrentSong(selectedSong);
     setIsPlaying(true);
   }
@@ -127,11 +136,27 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   const playRandomSong = () => {
     const limitedLibrary = library.filter((song) => song.key !== currentSongKey);
     const randomSong = getRandomSong(limitedLibrary);
+    // const favorites = getFavorites();
+    // randomSong.favorite = favorites.includes(randomSong.key);
     setCurrentSong(randomSong);
     currentSongKey = randomSong.key;
     if (randomSong.audio) {
       randomSong.audio.play();
     }
+  }
+
+  const addFavorite = (songKey: string) => {
+    const currentFavorites = getFavorites();
+    currentFavorites.push(songKey);
+    saveFavorites(currentFavorites);
+    setFavorites(currentFavorites);
+  };
+
+  const removeFavorite = (songKeyToRemove: string) => {
+    const currentFavorites = getFavorites();
+    const filteredFavorites = currentFavorites.filter((songKey: string) => songKey !== songKeyToRemove);
+    saveFavorites(filteredFavorites);
+    setFavorites(filteredFavorites);
   }
   
   useEffect(() => {
@@ -154,6 +179,11 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
     setViewHeight(htmlHeight - headerHeight - footerHeight);
   }, [headerHeight, footerHeight])
 
+  useEffect(() => { 
+    currentSong.favorite = favorites.includes(currentSong.key)
+    setCurrentSong(currentSong);
+  }, [favorites, currentSong])
+
   return (
     <AppContext.Provider value={{
       currentView,
@@ -169,7 +199,10 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       getSearchSuggestion,
       setHeaderHeight,
       setFooterHeight,
-      viewHeight
+      viewHeight,
+      addFavorite,
+      removeFavorite,
+      favorites
     }}>
       {props.children}
     </AppContext.Provider>

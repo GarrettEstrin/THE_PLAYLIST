@@ -10,7 +10,8 @@ const library: libraryItem[] = [
     canPlay: false,
     key: 'g',
     processed: false,
-    unique: 0
+    unique: 0,
+    favorite: false
   },
   {
     title: "Butterfly",
@@ -22,6 +23,7 @@ const library: libraryItem[] = [
     key: 'b',
     processed: false,
     unique: 0,
+    favorite: false
   },
   {
     title: "Re-Arranged",
@@ -32,19 +34,41 @@ const library: libraryItem[] = [
     canPlay: false,
     key: 'r',
     processed: false,
-    unique: 0
+    unique: 0,
+    favorite: false
   }
 ];
 
-const setupLibrary = () => {
-library.forEach((song) => {
-  if (process.env.NODE_ENV === 'development') { 
-    song.file = song.file.replace('.mp3', '-dev.mp3', );
+const getFavorites = () => {
+  const rawFavorites = localStorage.favorites;
+  let parsedFavorites: string[] = [];
+  if (rawFavorites) {
+    try {
+      parsedFavorites = JSON.parse(rawFavorites);
+    } catch (error) {}
   }
+  return parsedFavorites;
+}
+
+const saveFavorites = (favorites: string[]) => {
+  localStorage.favorites = JSON.stringify(favorites);
+};
+
+const setupLibrary = () => {
+
+  library.forEach((song) => {
+    if (process.env.NODE_ENV === 'development') { 
+      song.file = song.file.replace('.mp3', '-dev.mp3', );
+    }
+    const parsedFavorites = getFavorites();
     const audio = new Audio(`/audio/${song.file}`);
     song.audio = audio;
+    if (parsedFavorites.includes(song.key)) {
+      song.favorite = true;
+    }
   })
   return library;
 }
 
 export default setupLibrary();
+export { getFavorites, saveFavorites };

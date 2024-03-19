@@ -7,7 +7,8 @@ type libraryItem = {
   'canPlay': boolean,
   'key': string,
   'processed': boolean,
-  'unique': number
+  'unique': number,
+  'favorite': boolean
 }
 
 export default libraryItem;

@@ -32,3 +32,11 @@
 .player__now-playing-title {
   font-weight: 800;
 }
+
+.player__favorite {
+  margin: 40px;
+}
+
+.player__icon-cont {
+  width: 24px;
+}

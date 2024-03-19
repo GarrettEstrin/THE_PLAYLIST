@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faPause, faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
 
 import { useAppContext } from '../Utilities/AppContext';
 
@@ -8,7 +9,14 @@ import './player.css';
 
 
 function Player() {
-  const { currentSong, isPlaying, play, pause } = useAppContext();
+  const { currentSong, isPlaying, play, pause, addFavorite, removeFavorite, favorites } = useAppContext();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => { 
+    if (currentSong) {
+      setIsFavorite(favorites.includes(currentSong.key));
+    }
+  }, [favorites, currentSong])
 
   if (currentSong === null) {
     return null;
@@ -23,9 +31,14 @@ function Player() {
         <p className="player__now-playing-title">{currentSong.title}</p>
         <p className="player__now-playing-artist">{currentSong.artist}</p>
       </div>
+      {isFavorite ?
+        <div className="player__favorite" onClick={() => {removeFavorite(currentSong.key)}}><FontAwesomeIcon icon={faHeart} /></div> :
+        <div className="player__favorite" onClick={() => {addFavorite(currentSong.key)}}><FontAwesomeIcon icon={farHeart} /></div>
+      }
+      
       {isPlaying ?
-        <div onClick={pause}><FontAwesomeIcon icon={faPause} /></div> :
-        <div onClick={play}><FontAwesomeIcon icon={faPlay} /></div>
+        <div className="player__icon-cont" onClick={pause}><FontAwesomeIcon icon={faPause} /></div> :
+        <div className="player__icon-cont" onClick={play}><FontAwesomeIcon icon={faPlay} /></div>
       }
     </div>
   )
