@@ -8,5 +8,16 @@ export const rowTitles = [
   'Party for Chillin',
   'Chill',
   'Party',
-  'Party Chill'
+  'Party Chill',
+  'Chillin Time',
+  'Future Favorites',
+  'Currently Trending',
+  'Popular in Your Location',
+  'Old Favorites',
+  'Chillin Party',
+  'What Your Cool Friends Are Listening To',
+  'Time To Concentrate (On Chillin)',
+  "90's Favs",
+  'Feel Good Picks',
+  'Timeless Classics'
 ];

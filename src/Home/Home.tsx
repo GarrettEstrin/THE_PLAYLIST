@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAppContext } from '../Utilities/AppContext';
 import { randomIndex } from '../Utilities/getRandomSong';
 import timeOfDay from '../Utilities/timeOfDay';
+import { shuffleArray} from './helpers';
 import './home.css';
 import { rowTitles } from './rowTitles';
 
@@ -44,6 +45,7 @@ function Home() {
     
     const generateRows = (numberOfRows: number) => {
     const rows = [];
+    shuffleArray(rowTitles);
     for (let i = 0; i < numberOfRows; i++) {
       const row = (
         <div key={i}>
@@ -55,7 +57,7 @@ function Home() {
     return rows;
     }
     if (rows.length === 0 && initializedLibrary != null) {
-      setRows(generateRows(10));
+      setRows(generateRows(rowTitles.length));
     }
   }, [setRows, initializedLibrary, playNextSong, rows.length, currentSong]);
   

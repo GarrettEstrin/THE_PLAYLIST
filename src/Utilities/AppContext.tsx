@@ -82,14 +82,12 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   }
 
   const updateCanPlayStatus = (key: string) => {
-    console.log("updateCanPlayStatus called");
     library?.forEach((song: libraryItem) => {
       if (song.key === key) {
         song.canPlay = true;
       }
     })
     const canPlay = library.filter((song: libraryItem) => song.canPlay === true);
-    console.log({canPlay})
     if (canPlay.length === library.length) {
       setInitializedLibrary(library);
     }
@@ -168,7 +166,6 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   
   useEffect(() => {
     library.forEach((song: libraryItem) => {
-      console.log({ song });
       if (song.processed) {
         return;
       }

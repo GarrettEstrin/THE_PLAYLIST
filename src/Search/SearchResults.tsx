@@ -19,7 +19,6 @@ function SearchResults(props: {searchTerm: string}) {
 
   useEffect(() => { 
     if (isKeyboardActive) {
-      console.log({searchResultHeight: viewHeight - heightOfInput, viewHeight})
       setSearchResultStyle({ height:   viewHeight - heightOfInput + "px"});
     } else {
       setSearchResultStyle({});
