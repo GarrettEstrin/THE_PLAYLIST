@@ -137,11 +137,11 @@ table {
 body, html {
   background-color: #000;
   overflow: hidden;
-  height: 100dvh;
+  height: 100%;
 }
 
 .App {
-  height: 100dvh;
+  height: 100%;
   width: 100%;
   max-width: 600px;
   margin: 0 auto;

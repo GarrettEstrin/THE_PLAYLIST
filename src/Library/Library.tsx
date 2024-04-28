@@ -9,12 +9,11 @@ import libraryItem from '../Types/Library';
 
 function Library() {
   const { favorites, initializedLibrary, removeFavorite } = useAppContext();
-  // const [favoriteSongs, setFavoriteSongs] = useState([]);
 
   const generateFavoriteSongsList = (): ReactElement[] => {
     if (favorites.length === 0 || !initializedLibrary) {
       return [
-        (<div className="library__subtitle">Add some favorites!</div>)
+        (<div className="library__subtitle" key={1}>Add some favorites!</div>)
       ]
     }
 

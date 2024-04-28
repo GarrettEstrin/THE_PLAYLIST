@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import libraryItem from '../Types/Library';
 
 import { useAppContext } from '../Utilities/AppContext';
 
 function SearchResults(props: {searchTerm: string}) {
-  const { initializedLibrary, playNextSong, getSearchSuggestion } = useAppContext();
+  const { initializedLibrary, playNextSong, getSearchSuggestion, viewHeight, isKeyboardActive } = useAppContext();
   const { searchTerm } = props;
+  const [searchResultStyle, setSearchResultStyle] = useState({});
+  const heightOfInput = 70;
+  
   const search = (searchTerm: string, song: libraryItem) => {
     const { title, artist} = song;
     return (
@@ -13,6 +16,15 @@ function SearchResults(props: {searchTerm: string}) {
       artist.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }
+
+  useEffect(() => { 
+    if (isKeyboardActive) {
+      console.log({searchResultHeight: viewHeight - heightOfInput, viewHeight})
+      setSearchResultStyle({ height:   viewHeight - heightOfInput + "px"});
+    } else {
+      setSearchResultStyle({});
+    }
+  }, [viewHeight, isKeyboardActive])
 
   const generateSearchResults = () => {
     if (searchTerm.length === 0) {
@@ -44,7 +56,7 @@ function SearchResults(props: {searchTerm: string}) {
   };
 
   return (
-    <div>
+    <div className="search__results" style={searchResultStyle}>
       {generateSearchResults()}
     </div>
   );

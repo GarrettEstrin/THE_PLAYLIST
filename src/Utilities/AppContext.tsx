@@ -24,6 +24,9 @@ interface DefaultContextType {
   addFavorite: (songKey: string) => void
   removeFavorite: (songKey: string) => void
   favorites: string[]
+  htmlHeight: number
+  isKeyboardActive: boolean
+  setIsKeyboardActive: React.Dispatch<SetStateAction<boolean>>
 }
 
 const defaultContext: DefaultContextType = {
@@ -43,7 +46,10 @@ const defaultContext: DefaultContextType = {
   viewHeight: 0,
   addFavorite: () => { },
   removeFavorite: () => { },
-  favorites: getFavorites()
+  favorites: getFavorites(),
+  htmlHeight: 0,
+  isKeyboardActive: false,
+  setIsKeyboardActive: () => { },
 };
 
 export const AppContext = createContext(defaultContext);
@@ -60,7 +66,10 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [footerHeight, setFooterHeight] = useState(0);
   const [viewHeight, setViewHeight] = useState(0)
+  const [initialHtmlHeight] = useState(document.body.clientHeight);
+  const [htmlHeight, setHTMLHeight] = useState(0)
   const [favorites, setFavorites] = useState(getFavorites());
+  const [isKeyboardActive, setIsKeyboardActive] = useState(false);
   let currentSongKey = currentSong.key;
 
   const getSearchSuggestion = (): string => {
@@ -127,8 +136,6 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
     }
     
     currentSongKey = selectedSong.key;
-    // const favorites = getFavorites();
-    // selectedSong.favorite = favorites.includes(selectedSong.key);
     setCurrentSong(selectedSong);
     setIsPlaying(true);
   }
@@ -136,8 +143,6 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
   const playRandomSong = () => {
     const limitedLibrary = library.filter((song) => song.key !== currentSongKey);
     const randomSong = getRandomSong(limitedLibrary);
-    // const favorites = getFavorites();
-    // randomSong.favorite = favorites.includes(randomSong.key);
     setCurrentSong(randomSong);
     currentSongKey = randomSong.key;
     if (randomSong.audio) {
@@ -176,8 +181,19 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
 
   useEffect(() => {
     const htmlHeight = document.body.clientHeight;
+    setHTMLHeight(htmlHeight);
     setViewHeight(htmlHeight - headerHeight - footerHeight);
   }, [headerHeight, footerHeight])
+
+  window.addEventListener("resize", () => {
+    const localHTMLHeight = document.body.clientHeight;
+    if (isKeyboardActive && initialHtmlHeight !== localHTMLHeight) {
+      setViewHeight(localHTMLHeight - headerHeight);
+    } else {
+      setViewHeight(htmlHeight - headerHeight - footerHeight);
+    }
+    
+  });
 
   useEffect(() => { 
     currentSong.favorite = favorites.includes(currentSong.key)
@@ -202,7 +218,10 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
       viewHeight,
       addFavorite,
       removeFavorite,
-      favorites
+      favorites,
+      htmlHeight,
+      isKeyboardActive,
+      setIsKeyboardActive
     }}>
       {props.children}
     </AppContext.Provider>

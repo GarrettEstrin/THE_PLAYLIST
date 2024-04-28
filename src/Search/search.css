@@ -1,13 +1,21 @@
+.view.search {
+  overflow: hidden;
+}
+
 .view__search {
   width: 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  position: relative;
+  height: inherit;
 }
 
-.search__title {
-  text-align: center;
-  font-size: 40px;
+.search__input-cont {
+  position: absolute;
+  height: 70px;
+  width: 100%;
+  background-color: black;
 }
 
 .search__input {
@@ -18,6 +26,12 @@
   border-radius: 5px;
   box-sizing: border-box;
   font-size: 20px;
+}
+
+.search__results {
+  padding: 70px 0 0 0;
+  overflow-y: scroll;
+  height: 83%;
 }
 
 .search__row-cont {

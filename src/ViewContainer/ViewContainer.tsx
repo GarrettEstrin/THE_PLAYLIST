@@ -11,6 +11,7 @@ import './viewContainer.css';
 function ViewContainer() {
   const { Home, Search, Library } = Views;
   const { currentView, viewHeight } = useAppContext();
+
   const getCurrentView = (currentView: string) => {
     switch (currentView) {
       case Home:
@@ -24,7 +25,7 @@ function ViewContainer() {
     }
   }
   return (
-    <div className="view" style={{height: viewHeight + "px"}}>
+    <div className={"view " + currentView} style={{height: viewHeight + "px"}}>
       {getCurrentView(currentView)}
     </div>
   );
