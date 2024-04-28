@@ -10,10 +10,11 @@ function SearchResults(props: {searchTerm: string}) {
   const heightOfInput = 70;
   
   const search = (searchTerm: string, song: libraryItem) => {
-    const { title, artist} = song;
+    const { title, artist, tags} = song;
     return (
       title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      artist.toLowerCase().includes(searchTerm.toLowerCase())
+      artist.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      tags.toLowerCase().includes(searchTerm.toLowerCase())
     )
   }
 

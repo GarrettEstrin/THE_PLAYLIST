@@ -8,7 +8,8 @@ type libraryItem = {
   'key': string,
   'processed': boolean,
   'unique': number,
-  'favorite': boolean
+  'favorite': boolean,
+  'tags': string
 }
 
 export default libraryItem;

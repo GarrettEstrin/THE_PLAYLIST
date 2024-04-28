@@ -1,5 +1,7 @@
 import libraryItem from '../Types/Library';
 
+const tags = "chill party chillin";
+
 const library: libraryItem[] = [
   {
     title: "007 Watch Theme",
@@ -11,7 +13,8 @@ const library: libraryItem[] = [
     key: 'g',
     processed: false,
     unique: 0,
-    favorite: false
+    favorite: false,
+    tags,
   },
   {
     title: "Butterfly",
@@ -23,7 +26,8 @@ const library: libraryItem[] = [
     key: 'b',
     processed: false,
     unique: 0,
-    favorite: false
+    favorite: false,
+    tags,
   },
   {
     title: "Re-Arranged",
@@ -35,7 +39,8 @@ const library: libraryItem[] = [
     key: 'r',
     processed: false,
     unique: 0,
-    favorite: false
+    favorite: false,
+    tags,
   }
 ];
 
