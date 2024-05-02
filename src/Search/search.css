@@ -47,3 +47,11 @@
   align-self: center;
   margin: 0 10px;
 }
+
+.search__favorite {
+  align-content: center;
+  right: 10%;
+  position: relative;
+  margin-left: auto;
+  font-size: 30px;
+}

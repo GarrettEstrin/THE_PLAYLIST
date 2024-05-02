@@ -5,8 +5,11 @@
 }
 
 .library__favorite {
-  align-self: center;
-  margin: 0 20px 0 auto;
+  align-content: center;
+  right: 10%;
+  position: relative;
+  margin-left: auto;
+  font-size: 30px;
 }
 
 .library__subtitle {
