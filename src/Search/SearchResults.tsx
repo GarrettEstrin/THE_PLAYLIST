@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import libraryItem from '../Types/Library';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
 
 import { useAppContext } from '../Utilities/AppContext';
 
 function SearchResults(props: {searchTerm: string}) {
-  const { initializedLibrary, playNextSong, getSearchSuggestion, viewHeight, isKeyboardActive } = useAppContext();
+  const { initializedLibrary, playNextSong, getSearchSuggestion, viewHeight, isKeyboardActive, removeFavorite, addFavorite, favorites } = useAppContext();
   const { searchTerm } = props;
   const [searchResultStyle, setSearchResultStyle] = useState({});
   const heightOfInput = 70;
@@ -33,12 +36,21 @@ function SearchResults(props: {searchTerm: string}) {
     const searchResults = initializedLibrary?.map((song: libraryItem, index: number) => {
       if (search(searchTerm, song)) {
         return (
-          <div className="search__row-cont" key={index} onClick={() => {playNextSong(song.key)}}>
-            <img className="search__artwork" src={`/album_covers/${song.album_art}`} alt="album art" />
-            <div className="search__title-cont">
+          <div className="search__row-cont" key={index}>
+            <img
+              className="search__artwork"
+              src={`/album_covers/${song.album_art}`}
+              alt="album art"
+              onClick={() => { playNextSong(song.key) }}
+            />
+            <div className="search__title-cont" onClick={() => {playNextSong(song.key)}}>
               <p className="search__item-title">{song.title}</p>
               <p className="search__item-title">{song.artist}</p>
             </div>
+            {favorites.includes(song.key) ?
+              <div className="search__favorite" onClick={() => {removeFavorite(song.key)}}><FontAwesomeIcon icon={faHeart} /></div> :
+              <div className="search__favorite" onClick={() => {addFavorite(song.key)}}><FontAwesomeIcon icon={farHeart} /></div>
+      }
           </div>
         );
       }
