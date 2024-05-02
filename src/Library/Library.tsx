@@ -8,7 +8,7 @@ import './library.css';
 import libraryItem from '../Types/Library';
 
 function Library() {
-  const { favorites, initializedLibrary, removeFavorite } = useAppContext();
+  const { favorites, initializedLibrary, removeFavorite, playNextSong } = useAppContext();
 
   const generateFavoriteSongsList = (): ReactElement[] => {
     if (favorites.length === 0 || !initializedLibrary) {
@@ -21,8 +21,13 @@ function Library() {
       if (favorites.includes(song.key)) {
         const favoriteElement = (
           <div className="search__row-cont" key={song.key}>
-            <img className="search__artwork" src={`/album_covers/${song.album_art}`} alt="album art" />
-            <div className="search__title-cont">
+            <img
+              className="search__artwork"
+              src={`/album_covers/${song.album_art}`}
+              alt="album art"
+              onClick={() => { playNextSong(song.key) }}
+            />
+            <div className="search__title-cont" onClick={() => { playNextSong(song.key) }}>
               <p className="search__item-title">{song.title}</p>
               <p className="search__item-title">{song.artist}</p>
             </div>
