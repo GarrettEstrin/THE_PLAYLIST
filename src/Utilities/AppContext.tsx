@@ -6,6 +6,12 @@ import libraryItem from '../Types/Library';
 import library, { getFavorites, saveFavorites } from './library';
 import getRandomSong from './getRandomSong';
 
+declare global {
+    interface Window { currentSong: any; }
+}
+
+window.currentSong = window.currentSong || {};
+
 interface DefaultContextType {
   currentView: string,
   setCurrentView: React.Dispatch<SetStateAction<View>>,
@@ -97,6 +103,7 @@ export const AppContextProvider = (props: { children: ReactElement }) => {
     library.forEach((song: libraryItem) => {
       if (song.key === currentSongKey && song.audio) {
         song.audio.play();
+        window.currentSong = song;
       }
     });
     setIsPlaying(true);

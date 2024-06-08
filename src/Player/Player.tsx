@@ -5,6 +5,8 @@ import { faHeart as farHeart } from '@fortawesome/free-regular-svg-icons'
 
 import { useAppContext } from '../Utilities/AppContext';
 
+import TrackDuration from './TrackDuration';
+
 import './player.css';
 
 
@@ -21,6 +23,7 @@ function Player() {
   if (currentSong === null) {
     return null;
   }
+
   
   return (
     <div className="player">
@@ -31,6 +34,7 @@ function Player() {
         <p className="player__now-playing-title">{currentSong.title}</p>
         <p className="player__now-playing-artist">{currentSong.artist}</p>
       </div>
+      <TrackDuration />
       {isFavorite ?
         <div className="player__favorite" onClick={() => {removeFavorite(currentSong.key)}}><FontAwesomeIcon icon={faHeart} /></div> :
         <div className="player__favorite" onClick={() => {addFavorite(currentSong.key)}}><FontAwesomeIcon icon={farHeart} /></div>
