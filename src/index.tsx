@@ -8,7 +8,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 // force https
-if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost') {
+if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost' && window.location.hostname !== 'garrett.lan') {
   window.location.replace(`https:${window.location.hostname}`);
 }
 root.render(
