@@ -28,7 +28,7 @@ function Player() {
   return (
     <div className="player">
       <div className="player__album-cont">
-        <img src={`/album_covers/${currentSong.album_art}`} alt="album cover" className="player__album" />
+        <img src={`${currentSong.album_art}`} alt="album cover" className="player__album" />
       </div>
       <div className="player__now-playing-cont">
         <p className="player__now-playing-title">{currentSong.title}</p>

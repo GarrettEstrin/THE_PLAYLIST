@@ -23,7 +23,7 @@ function Library() {
           <div className="search__row-cont" key={song.key}>
             <img
               className="search__artwork"
-              src={`/album_covers/${song.album_art}`}
+              src={`${song.album_art}`}
               alt="album art"
               onClick={() => { playNextSong(song.key) }}
             />

@@ -1,6 +1,7 @@
 import libraryItem from '../Types/Library';
 
 const tags = "chill party chillin";
+const s3_path = "https://theplaylist.s3.us-west-2.amazonaws.com";
 
 const library: libraryItem[] = [
   {
@@ -66,11 +67,13 @@ const setupLibrary = () => {
       song.file = song.file.replace('.mp3', '-dev.mp3', );
     }
     const parsedFavorites = getFavorites();
-    const audio = new Audio(`/audio/${song.file}`);
+    const audio = new Audio(s3_path + `/audio/${song.file}`);
     song.audio = audio;
     if (parsedFavorites.includes(song.key)) {
       song.favorite = true;
     }
+    // set s3_path for album_art
+    song.album_art = `${s3_path}/album_covers/${song.album_art}`
   })
   return library;
 }
