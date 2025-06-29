@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppContext } from '../Utilities/AppContext';
 import { randomIndex } from '../Utilities/getRandomSong';
 import timeOfDay from '../Utilities/timeOfDay';
@@ -22,7 +22,7 @@ function Home() {
           <div className="row__item-cont" key={i} onClick={() => {
             playNextSong(song.key);
           }}>
-            <img className="row__artwork" src={`/album_covers/${song.album_art}`} alt="album art" />
+            <img className="row__artwork" src={`${song.album_art}`} alt="album art" />
             <p className="row__item-title">{song.title}</p>
           </div>
         );

@@ -20,7 +20,6 @@ function TrackDuration() {
     if (localCurrentPercentage < 100) {
       setCurrentPercentage(localCurrentPercentage);
     }
-    console.log(currentPercentage)
   }, 250)
 
   return (
